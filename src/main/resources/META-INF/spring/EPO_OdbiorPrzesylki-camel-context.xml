@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    Definicje tras camela do odbioru przesyłek EPO z kolejek SOWKW na brokerze amqsowkw
--->
-<!-- Configures the Camel Context-->
+<!-- Definicje tras camela do odbioru przesyłek EPO z kolejek SOWKW na brokerze 
+	amqsowkw -->
+<!-- Configures the Camel Context -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
-        <property name="brokerURL" value="tcp://localhost:61617"/>
-    </bean>
-    <camelContext id="_EPOOdbiorPrzesylkiContext" xmlns="http://camel.apache.org/schema/spring">
-        <route id="_OdbiorPrzesylkiroute">
-        <!-- <from uri="timer:startEPO?period=10s"/>-->
-        <from id="_kolejkaEPOWe" uri="activemq:queue:EPO.WE">
-                <description>Wejsciowa kolejka XML</description>
-            </from>
-        <to uri="log:koniecEPO"/>
-        </route>
-    </camelContext>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        
+	http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<bean class="org.apache.activemq.camel.component.ActiveMQComponent"
+		id="activemq">
+		<property name="brokerURL" value="tcp://localhost:61617" />
+		<!-- <property name="brokerURL" value="${property[epo.sowkw.activemq.url]}"/> -->
+	</bean>
+	<camelContext id="_EPOOdbiorPrzesylkiContext" xmlns="http://camel.apache.org/schema/spring">
+		<dataFormats>
+			<jaxb contextPath="pl.ms.gov.eukw.epo" id="epoJaxb"
+				ignoreJAXBElement="true" prettyPrint="true" />
+		</dataFormats>
+		<route id="_OdbiorPrzesylkiEPORoute">
+			<from id="_wejscieEPO"
+				uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000" />
+			<!-- <from uri="timer:startEPO?period=10s"/> -->
+			<!-- <from id="_kolejkaEPOWe" uri="activemq:queue:EPO.WE">
+				<description>Odczyt z wejsciowej kolejki XML z SOWKW</description>
+			</from>-->
+			<unmarshal id="_konwersjaXML2POJO" ref="epoJaxb" />
+			<to uri="log:koniecEPO" />
+		</route>
+	</camelContext>
 </beans>

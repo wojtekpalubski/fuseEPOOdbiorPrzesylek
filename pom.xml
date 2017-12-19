@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>pl.wpe</groupId>
-	<artifactId>EPO-odbior-SOWKW</artifactId>
+	<groupId>pl.gov.ms.eukw.esb.internal</groupId>
+	<artifactId>eukw-esb-int-sowkw-epo</artifactId>
 	<version>1.0.0</version>
 	<packaging>bundle</packaging>
-	<name>Odbior przesylek EPO z kolejek</name>
-	<description>Odbior przesylek EPO z kolejek</description>
+	<name>MS EUKW odbior EPOz SOWKW</name>
+	<description>Odbior przesylek EPO z kolejek SOWKW</description>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -20,7 +20,7 @@
 		<camel.version>2.12.0.redhat-610379</camel.version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
-		<jboss.fuse.bom.version>6.3.0.redhat-310</jboss.fuse.bom.version>
+		<jboss.fuse.bom.version>6.1.0.redhat-379</jboss.fuse.bom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencyManagement>
@@ -42,6 +42,10 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jaxb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
@@ -131,8 +135,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>fuseEPOOdbiorPrzesylek</Bundle-SymbolicName>
-						<Bundle-Name>Empty Camel Spring Example [fuseEPOOdbiorPrzesylek]</Bundle-Name>
+						<Bundle-SymbolicName>eukw-esb-int-sowkw-epo</Bundle-SymbolicName>
+						<Bundle-Name>Odbior przesylek EPO z SOWKW</Bundle-Name>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -140,8 +144,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -150,6 +154,26 @@
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
+				<executions>
+					<execution>
+						<id>copy-jaxb-index</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/pl/ms/gov/eukw/epo/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/java/pl/ms/gov/eukw/epo/</directory>
+									<includes>
+										<include>jaxb.index</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.camel</groupId>
