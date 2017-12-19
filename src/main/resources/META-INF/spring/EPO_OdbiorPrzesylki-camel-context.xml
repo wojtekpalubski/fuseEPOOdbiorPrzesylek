@@ -18,12 +18,12 @@
 				ignoreJAXBElement="true" prettyPrint="true" />
 		</dataFormats>
 		<route id="_OdbiorPrzesylkiEPORoute">
-			<from id="_wejscieEPO"
+			<!-- <from id="_wejscieEPO"
 				uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000" />
-			<!-- <from uri="timer:startEPO?period=10s"/> -->
-			<!-- <from id="_kolejkaEPOWe" uri="activemq:queue:EPO.WE">
+			<from uri="timer:startEPO?period=10s"/> -->
+			<from id="_kolejkaEPOWe" uri="activemq:queue:EPO.WE">
 				<description>Odczyt z wejsciowej kolejki XML z SOWKW</description>
-			</from>-->
+			</from>
 			<unmarshal id="_konwersjaXML2POJO" ref="epoJaxb" />
 			<to uri="log:koniecEPO" />
 		</route>
