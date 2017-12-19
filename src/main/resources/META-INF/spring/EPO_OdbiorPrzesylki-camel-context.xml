@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Definicje tras camela do odbioru przesyłek EPO z kolejek SOWKW na brokerze amqsowkw
+-->
+<!-- Configures the Camel Context-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="brokerURL" value="tcp://localhost:61617"/>
+    </bean>
+    <camelContext id="_EPOOdbiorPrzesylkiContext" xmlns="http://camel.apache.org/schema/spring">
+        <route id="_OdbiorPrzesylkiroute">
+        <!-- <from uri="timer:startEPO?period=10s"/>-->
+        <from id="_kolejkaEPOWe" uri="activemq:queue:EPO.WE">
+                <description>Wejsciowa kolejka XML</description>
+            </from>
+        <to uri="log:koniecEPO"/>
+        </route>
+    </camelContext>
+</beans>
