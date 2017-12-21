@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://asseco.pl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	name="hostinfo" targetNamespace="http://asseco.pl/">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://asseco.pl/" elementFormDefault="unqualified"
+			targetNamespace="http://asseco.pl/" version="1.0">
+
+			<xs:element name="getHostinfo" type="tns:getHostinfo" />
+
+			<xs:element name="getHostinfo1" type="tns:getHostinfo1" />
+
+			<xs:element name="getHostinfo1Response" type="tns:getHostinfo1Response" />
+
+			<xs:element name="getHostinfoResponse" type="tns:getHostinfoResponse" />
+
+			<xs:complexType name="getHostinfo">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="komunikat" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="getHostinfoResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="getHostinfo1">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="komunikat" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="getHostinfo1Response">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return" type="tns:hostinfo" />
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="hostinfo">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="adres" type="xs:string" />
+					<xs:element name="cpuCount" type="xs:int" />
+					<xs:element name="epoch" type="xs:long" />
+					<xs:element name="freeMem" type="xs:long" />
+					<xs:element minOccurs="0" name="hostname" type="xs:string" />
+					<xs:element minOccurs="0" name="komunikat" type="xs:string" />
+					<xs:element name="totalMem" type="xs:long" />
+					<xs:element name="uptime" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getHostinfo1Response">
+		<wsdl:part element="tns:getHostinfo1Response" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getHostinfoResponse">
+		<wsdl:part element="tns:getHostinfoResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getHostinfo">
+		<wsdl:part element="tns:getHostinfo" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getHostinfo1">
+		<wsdl:part element="tns:getHostinfo1" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="IHostinfoService">
+		<wsdl:operation name="getHostinfo">
+			<wsdl:input message="tns:getHostinfo" name="getHostinfo">
+			</wsdl:input>
+			<wsdl:output message="tns:getHostinfoResponse" name="getHostinfoResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getHostinfo1">
+			<wsdl:input message="tns:getHostinfo1" name="getHostinfo1">
+			</wsdl:input>
+			<wsdl:output message="tns:getHostinfo1Response" name="getHostinfo1Response">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="hostinfoSoapBinding" type="tns:IHostinfoService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getHostinfo">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getHostinfo">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getHostinfoResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getHostinfo1">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getHostinfo1">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getHostinfo1Response">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="hostinfo">
+		<wsdl:port binding="tns:hostinfoSoapBinding" name="HostinfoServicePort">
+			<soap:address location="http://172.25.117.73:8083/services/hostinfo" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

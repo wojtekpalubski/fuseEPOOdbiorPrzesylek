@@ -1,14 +1,14 @@
-Camel Project for Spring 
-=========================================
+﻿Parametryzacja modulu eukw-esb-int-sowkw-epo:
 
-To build this project use
 
-    mvn install
+- utworzyć plik EPO-sowkw.properties w katalogu etc lub instances/${karaf.name}/etc instalacji FUSE
 
-To run the project you can execute the following Maven goal
 
-    mvn camel:run
+- w pliku zdefiniować parametry:
 
-For more help see the Apache Camel documentation
+epo.sowkw.activemq.host=localhost
 
-    http://camel.apache.org/
+epo.sowkw.activemq.port=61617
+
+epo.sowkw.activemq.kolejka.sowkw=EPO.WE
+

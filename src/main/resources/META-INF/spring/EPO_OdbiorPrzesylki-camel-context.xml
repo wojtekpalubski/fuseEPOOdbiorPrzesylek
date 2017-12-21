@@ -3,29 +3,91 @@
 	amqsowkw -->
 <!-- Configures the Camel Context -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="        
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        
-	http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xsi:schemaLocation="          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd http://camel.apache.org/schema/cxf
+http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+	<bean class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer"
+		id="bridgePropertyPlaceholder">
+		<property name="locations">
+			<list>
+				<value>classpath:/EPO-sowkw.properties</value>
+				<value>file:${karaf.home}/etc/EPO-sowkw.properties</value>
+				<value>file:${karaf.home}/instances/${karaf.name}/etc/EPO-sowkw.properties
+				</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
 	<bean class="org.apache.activemq.camel.component.ActiveMQComponent"
 		id="activemq">
-		<property name="brokerURL" value="tcp://localhost:61617" />
-		<!-- <property name="brokerURL" value="${property[epo.sowkw.activemq.url]}"/> -->
+		<!-- <property name="brokerURL" value="tcp://localhost:61617" /> <property 
+			name="brokerURL" value="tcp://172.25.117.888:61716"/> -->
+		<property name="brokerURL"
+			value="tcp://${epo.sowkw.activemq.host}:${epo.sowkw.activemq.port}" />
 	</bean>
+
+	<!-- <import resource="classpath:META-INF/cxf/cxf.xml" /> <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" 
+		/> <import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" 
+		/> -->
+	<cxf:cxfEndpoint id="KSIhostinfoEndpoint"
+		address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
+		wsdlURL="ksi-soap-hostinfo-api.wsdl" serviceName="ws:hostinfo"
+		endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/" />
+	<bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoProcessor" id="przygotujHostinfoParametry" />
+	<bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoEnricher" id="przygotujHostinfoParametryEnricher" />
+	<bean class="pl.ms.gov.eukw.epo.Hostinfo1RequestBean" id="Hostinfo1RequestBean" />
+	<bean class="pl.ms.gov.eukw.epo.Hostinfo2RequestBean" id="Hostinfo2RequestBean" />
+
 	<camelContext id="_EPOOdbiorPrzesylkiContext" xmlns="http://camel.apache.org/schema/spring">
 		<dataFormats>
 			<jaxb contextPath="pl.ms.gov.eukw.epo" id="epoJaxb"
 				ignoreJAXBElement="true" prettyPrint="true" />
+			<soapjaxb contextPath="pl.asseco" id="hostinfoJaxb"
+				 />
 		</dataFormats>
 		<route id="_OdbiorPrzesylkiEPORoute">
-			<!-- <from id="_wejscieEPO"
-				uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000" />
-			<from uri="timer:startEPO?period=10s"/> -->
-			<from id="_kolejkaEPOWe" uri="activemq:queue:EPO.WE">
+			<!-- <from id="_wejscieEPO" uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000" 
+				/> <from uri="timer:startEPO?period=10s"/> -->
+			<from id="_kolejkaEPOWe" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw}}">
 				<description>Odczyt z wejsciowej kolejki XML z SOWKW</description>
 			</from>
+			<log id="_log1" message="replyto1=${header.JMSReplyTo}" />
 			<unmarshal id="_konwersjaXML2POJO" ref="epoJaxb" />
-			<to uri="log:koniecEPO" />
+			<log id="_log2" message="replyto2=${header.JMSReplyTo}" />
+			<to id="_to1" uri="log:koniecEPO" />
+		</route>
+		<route id="_callKSIhostinfo">
+			<from id="hostinfoTimer" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=2" />
+			<!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt 
+				z wejsciowej kolejki XML z SOWKW</description> </from> -->
+			<to id="odebraneZkolejkiEPO" uri="log:odebraneZkolejkiEPO" />
+			<setHeader headerName="operationName">
+				<constant>getHostinfo1</constant>
+			</setHeader>
+			<setHeader headerName="komunikat">
+				<constant>kom</constant>
+			</setHeader>
+			<!-- <setHeader headerName="komunikat2">
+				<constant>kom2</constant>
+			</setHeader> -->
+			<setBody>
+				<simple>${header.JMSReplyTo}</simple>
+			</setBody>
+			<!-- <to id="poKSIhostinfoReply" uri="log:poKSIhostinfoReply" />
+			<process id="przygotujHostinfoParametry" ref="przygotujHostinfoParametry" />
+			<to id="poKSIhostinfoProcesor" uri="log:poKSIhostinfoProcesor" />
+			<setBody><simple>3456ytgfds</simple></setBody>
+			<to uri="bean:przygotujHostinfoParametryEnricher" />
+			<to id="poenrichBean" uri="log:poenrichBean" /> -->
+
+			<bean ref="Hostinfo1RequestBean" method="createSoapBody" />
+			<marshal ref="hostinfoJaxb" />
+			<to id="poHostinfoRequestBean" uri="log:HostinfoRequestBean" />
+			<to id="callKSIhostinfo" uri="cxf:bean:KSIhostinfoEndpoint" />
+			<to id="wynikKSIhostinfo" uri="log:wynikKSIhostinfo" />
+			<!-- <log message="${body.getAdres()}"/> -->
+			<!-- <setBody><simple>${body.getAdres()}</simple></setBody> -->
+			<log message="${body}" />
 		</route>
 	</camelContext>
 </beans>
