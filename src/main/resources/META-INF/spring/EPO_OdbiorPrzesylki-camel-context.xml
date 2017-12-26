@@ -33,6 +33,10 @@ http://camel.apache.org/schema/cxf/camel-cxf.xsd">
 		address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
 		wsdlURL="ksi-soap-hostinfo-api.wsdl" serviceName="ws:hostinfo"
 		endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/" />
+	<cxf:cxfEndpoint id="KSIhostinfo2Endpoint"
+					 address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
+					 wsdlURL="ksi-soap-hostinfo-api2.wsdl" serviceName="ws:hostinfo"
+					 endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/" />
 	<bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoProcessor" id="przygotujHostinfoParametry" />
 	<bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoEnricher" id="przygotujHostinfoParametryEnricher" />
 	<bean class="pl.ms.gov.eukw.epo.Hostinfo1RequestBean" id="Hostinfo1RequestBean" />
@@ -42,10 +46,10 @@ http://camel.apache.org/schema/cxf/camel-cxf.xsd">
 		<dataFormats>
 			<jaxb contextPath="pl.ms.gov.eukw.epo" id="epoJaxb"
 				ignoreJAXBElement="true" prettyPrint="true" />
-			<soapjaxb contextPath="pl.asseco" id="hostinfoJaxb"
-				 />
+			<soapjaxb contextPath="pl.asseco" id="hostinfoSoapJaxb"/>
+			<jaxb contextPath="pl.asseco" id="hostinfoJaxb"/>
 		</dataFormats>
-		<route id="_OdbiorPrzesylkiEPORoute">
+		<route id="_OdbiorPrzesylkiEPORoute" autoStartup="false">
 			<!-- <from id="_wejscieEPO" uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000" 
 				/> <from uri="timer:startEPO?period=10s"/> -->
 			<from id="_kolejkaEPOWe" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw}}">
@@ -56,7 +60,7 @@ http://camel.apache.org/schema/cxf/camel-cxf.xsd">
 			<log id="_log2" message="replyto2=${header.JMSReplyTo}" />
 			<to id="_to1" uri="log:koniecEPO" />
 		</route>
-		<route id="_callKSIhostinfo">
+		<route id="_callKSIhostinfo" autoStartup="false">
 			<from id="hostinfoTimer" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=2" />
 			<!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt 
 				z wejsciowej kolejki XML z SOWKW</description> </from> -->
@@ -81,12 +85,35 @@ http://camel.apache.org/schema/cxf/camel-cxf.xsd">
 			<to id="poenrichBean" uri="log:poenrichBean" /> -->
 
 			<bean ref="Hostinfo1RequestBean" method="createSoapBody" />
-			<marshal ref="hostinfoJaxb" />
+			<marshal ref="hostinfoSoapJaxb" />
 			<to id="poHostinfoRequestBean" uri="log:HostinfoRequestBean" />
 			<to id="callKSIhostinfo" uri="cxf:bean:KSIhostinfoEndpoint" />
 			<to id="wynikKSIhostinfo" uri="log:wynikKSIhostinfo" />
 			<!-- <log message="${body.getAdres()}"/> -->
 			<!-- <setBody><simple>${body.getAdres()}</simple></setBody> -->
+			<log message="${body}" />
+		</route>
+
+		<route id="_callKSIhostinfo2" autoStartup="true">
+			<from id="hostinfoTimer2" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1" />
+			<!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt
+				z wejsciowej kolejki XML z SOWKW</description> </from> -->
+			<to id="odebraneZkolejkiEPO2" uri="log:odebraneZkolejkiEPO2" />
+			<setHeader headerName="operationName">
+				<constant>getHostinfo2</constant>
+			</setHeader>
+			<setHeader headerName="komunikat">
+				<constant>kom</constant>
+			</setHeader>
+			 <setHeader headerName="komunikat2">
+				<constant>kom2</constant>
+			</setHeader>
+			<to id="poUstawieniuHeaderow" uri="log:poUstawieniuHeaderow" />
+			<bean ref="Hostinfo2RequestBean" method="createSoapBody" id="tworzenieRequestHostinfo2"/>
+			<to id="poHostinfo2RequestBean" uri="log:poHostinfo2RequestBean" />
+			<to id="callKSIhostinfo2" uri="cxf:bean:KSIhostinfo2Endpoint?defaultOperationName=getHostinfo2&amp;dataFormat=POJO" />
+			<to id="wynikKSIhostinfo2" uri="log:wynikKSIhostinfo" />
+
 			<log message="${body}" />
 		</route>
 	</camelContext>

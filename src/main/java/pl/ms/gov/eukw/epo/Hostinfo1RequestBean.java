@@ -3,7 +3,7 @@ package pl.ms.gov.eukw.epo;
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
 
-import pl.asseco.GetHostinfo1;
+import src.main.java.pl.asseco.GetHostinfo1;
 
 public class Hostinfo1RequestBean {
 	public void createSoapBody(@Header("komunikat") String komunikat, Exchange exchange) {
