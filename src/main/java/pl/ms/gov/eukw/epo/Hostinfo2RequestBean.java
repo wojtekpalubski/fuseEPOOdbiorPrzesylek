@@ -3,8 +3,8 @@ package pl.ms.gov.eukw.epo;
 import org.apache.camel.Exchange;
 import org.apache.camel.Header;
 
-import src.main.java.pl.asseco.GetHostinfo2;
-import src.main.java.pl.asseco.GetHostinfo2Response;
+import pl.asseco.GetHostinfo2;
+import pl.asseco.GetHostinfo2Response;
 
 public class Hostinfo2RequestBean {
 	public void createSoapBody(@Header("komunikat") String komunikat, @Header("komunikat2") String komunikat2,
@@ -29,5 +29,6 @@ public class Hostinfo2RequestBean {
 	public void procesSoapResponse(GetHostinfo2Response response) {
 		System.out.println("Procesuje odpowiedz");
 		System.out.println("Odebrany adres: "+response.getReturn().getAdres());
+		System.out.println("Odebrany epoch: "+response.getReturn().getEpoch());
 	}
 }

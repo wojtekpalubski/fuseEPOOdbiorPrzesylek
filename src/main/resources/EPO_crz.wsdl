@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://epo.ms.gov.pl/crz/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EPO_crz" targetNamespace="http://epo.ms.gov.pl/crz/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://epo.ms.gov.pl/crz/">
+      <xsd:element name="getSyncStatus">
+        <xsd:complexType>
+          <xsd:sequence>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getSyncStatusResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+          	<xsd:element name="data_rozpoczecia" type="xsd:dateTime"
+          		minOccurs="0" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Data_czas rozpoczecia ostatniego poprawnego	pobrania informacji zwrotnej
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="data_zakonczenia" type="xsd:dateTime" minOccurs="0" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>Data_czas zakonczenia ostatniego poprawnego pobrania informacji zwrotnej</xsd:documentation>
+          		</xsd:annotation></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="setWysylka">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="czas" type="xsd:dateTime"
+      				minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						Data i czas wysylki
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="EKN_GUID" type="xsd:string"
+      				minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						GUID ksiazki nadawczej
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="WKW_ID" type="xsd:string"
+      				minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						Identyfikator xrodlowego WKW przesylki,
+      						jednczesnie fragmen nazwy kolejki zwrotnej
+      						do WKW
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="PRZESYLKA_GUID" type="xsd:string"
+      				minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						GUID przesylki
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="PRZESYLKA_NR" type="xsd:string"
+      				minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						Numer przesylki (fragment z pola opis
+      						przesylki w XML)
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="EKN_DATA_UTWORZENIA"
+      				type="xsd:dateTime" minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						Data_czas utworzenia EKN (atrybut
+      						DataUtworzenia Zbioru z XML)
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="EKN_DATA_WYSLANIA"
+      				type="xsd:dateTime" minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>
+      						Data nadania EKN do MSEPO
+      					</xsd:documentation>
+      				</xsd:annotation>
+      			</xsd:element>
+      			<xsd:element name="EKN_STATUS" type="xsd:string" minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>Status EKN (np. Nadana, czy wszystkie przesylki dla EKN zostaly nadane)</xsd:documentation>
+      				</xsd:annotation></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="setWysylkaResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="status" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>Status zapisu informacji o wysylce do bazy danych</xsd:documentation>
+      				</xsd:annotation></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWysylka">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="PRZESYLKA_GUID" type="xsd:string" minOccurs="1" maxOccurs="1">
+      				<xsd:annotation>
+      					<xsd:documentation>GUID przesylki, ktorej dane trzeba pobrac</xsd:documentation>
+      				</xsd:annotation></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWysylkaResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="out" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getSyncStatusRequest">
+    <wsdl:part element="tns:getSyncStatus" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getSyncStatusResponse">
+    <wsdl:part element="tns:getSyncStatusResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="setWysylkaRequest">
+  	<wsdl:part name="parameters" element="tns:setWysylka"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setWysylkaResponse">
+  	<wsdl:part name="parameters" element="tns:setWysylkaResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getWysylkaRequest">
+  	<wsdl:part name="parameters" element="tns:getWysylka"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getWysylkaResponse">
+  	<wsdl:part name="parameters" element="tns:setWysylka"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="EPO_crz">
+    <wsdl:operation name="getSyncStatus">
+      <wsdl:documentation>Operacja pobrania daty ostatniego poprawnego rozpoczecia i zakonczenia pobrania informacji zwrotnej z MSEP</wsdl:documentation>
+      <wsdl:input message="tns:getSyncStatusRequest"/>
+      <wsdl:output message="tns:getSyncStatusResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="setWysylka">
+    	<wsdl:input message="tns:setWysylkaRequest"></wsdl:input>
+    	<wsdl:output message="tns:setWysylkaResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWysylka">
+    	<wsdl:documentation>Pobranie informacji i wysylc</wsdl:documentation>
+    	<wsdl:input message="tns:getWysylkaRequest"></wsdl:input>
+    	<wsdl:output message="tns:getWysylkaResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EPO_crzSOAP" type="tns:EPO_crz">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getSyncStatus">
+      <soap:operation soapAction="http://epo.ms.gov.pl/crz/getSyncStatus"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EPO_crz">
+    <wsdl:port binding="tns:EPO_crzSOAP" name="EPO_crzSOAP">
+      <soap:address location="https://localhost:8080/EpoCrz"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

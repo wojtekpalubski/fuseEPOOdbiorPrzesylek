@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/"
+        xmlns:tns="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/">
+
+
+    <!--TYPY-->
+	<complexType name="SyncStatus">
+		<sequence>
+          	<element name="data_rozpoczecia" type="dateTime"
+          		minOccurs="0" maxOccurs="1">
+          		<annotation>
+          			<documentation>
+          				Data_czas rozpoczecia ostatniego poprawnego	pobrania informacji zwrotnej
+          			</documentation>
+          		</annotation>
+          	</element>
+          	<element name="data_zakonczenia" type="dateTime" minOccurs="0" maxOccurs="1">
+          		<annotation>
+          			<documentation>Data_czas zakonczenia ostatniego poprawnego pobrania informacji zwrotnej</documentation>
+          		</annotation>
+			</element>
+          </sequence>
+    </complexType>
+	
+	<complexType  name="Wysylka">
+      		<sequence>
+      			<element name="czas" type="dateTime"
+      				minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						Data i czas wysylki
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="EKN_GUID" type="string"
+      				minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						GUID ksiazki nadawczej
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="WKW_ID" type="string"
+      				minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						Identyfikator xrodlowego WKW przesylki,
+      						jednczesnie fragmen nazwy kolejki zwrotnej
+      						do WKW
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="PRZESYLKA_GUID" type="string"
+      				minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						GUID przesylki
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="PRZESYLKA_NR" type="string"
+      				minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						Numer przesylki (fragment z pola opis
+      						przesylki w XML)
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="EKN_DATA_UTWORZENIA"
+      				type="dateTime" minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						Data_czas utworzenia EKN (atrybut
+      						DataUtworzenia Zbioru z XML)
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="EKN_DATA_WYSLANIA"
+      				type="dateTime" minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>
+      						Data nadania EKN do MSEPO
+      					</documentation>
+      				</annotation>
+      			</element>
+      			<element name="EKN_STATUS" type="string" minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>Status EKN (np. Nadana, czy wszystkie przesylki dla EKN zostaly nadane)</documentation>
+      				</annotation></element>
+      		</sequence>
+      	</complexType>
+		
+		<complexType name="WysylkaStatus">
+      		<sequence>
+      			<element name="status" type="boolean" minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>Status zapisu informacji o wysylce do bazy danych</documentation>
+      				</annotation></element>
+      		</sequence>
+      	</complexType>
+		
+		<complexType name="WysylkaGuid">
+      		<sequence>
+      			<element name="PRZESYLKA_GUID" type="string" minOccurs="1" maxOccurs="1">
+      				<annotation>
+      					<documentation>GUID przesylki, ktorej dane trzeba pobrac</documentation>
+      				</annotation>
+				</element>
+      		</sequence>
+      	</complexType>
+	
+	
+	
+    <!--OBIEKTY RESPONE I REQUEST-->
+	<element name="getSyncStatus">
+        <complexType>
+			<sequence>
+			</sequence>
+        </complexType>
+    </element>
+	
+	<element name="getSyncStatusResponse">
+        <complexType>
+            <sequence>
+                <element name="statusy" type="tns:SyncStatus" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+      </element>
+      <element name="setWysylka">
+      	<complexType>
+      		<sequence>
+      			<element name="wysylka" type="tns:Wysylka" minOccurs="1" maxOccurs="1"/>
+      		</sequence>
+      	</complexType>
+      </element>
+      <element name="setWysylkaResponse">
+      	<complexType>
+      		<sequence>
+      			<element name="wysylkaStatus" type="tns:WysylkaStatus" minOccurs="1" maxOccurs="1"/>
+      		</sequence>
+      	</complexType>
+      </element>
+      <element name="getWysylka">
+      	<complexType>
+      		<sequence>
+      			<element name="wysylkaGuid" type="tns:WysylkaGuid" minOccurs="1" maxOccurs="1"/>
+      		</sequence>
+      	</complexType>
+      </element>
+	  
+      <element name="getWysylkaResponse">
+      	<complexType>
+      		<sequence>
+      			<element name="out" type="string"></element>
+      		</sequence>
+      	</complexType>
+      </element>
+</schema>

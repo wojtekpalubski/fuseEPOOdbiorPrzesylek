@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/"
+        xmlns:app="http://ws.services.eukw.ms.gov.pl/EKWWnioski/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:zakres="http://ms.gov.pl/ekw/cmd/zakresdanych"
+        targetNamespace="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/">
+  
+  <wsdl:types>
+    <xsd:schema>
+            <xsd:import namespace="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/"
+                        schemaLocation="eukw_epo_crz.xsd">
+            </xsd:import>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getSyncStatusRequest">
+    <wsdl:part element="tns:getSyncStatus" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getSyncStatusResponse">
+    <wsdl:part element="tns:getSyncStatusResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="setWysylkaRequest">
+  	<wsdl:part name="parameters" element="tns:setWysylka"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setWysylkaResponse">
+  	<wsdl:part name="parameters" element="tns:setWysylkaResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getWysylkaRequest">
+  	<wsdl:part name="parameters" element="tns:getWysylka"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getWysylkaResponse">
+  	<wsdl:part name="parameters" element="tns:setWysylka"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="EPO_crz">
+    <wsdl:operation name="getSyncStatus">
+      <wsdl:documentation>Operacja pobrania daty ostatniego poprawnego rozpoczecia i zakonczenia pobrania informacji zwrotnej z MSEP</wsdl:documentation>
+      <wsdl:input message="tns:getSyncStatusRequest"/>
+      <wsdl:output message="tns:getSyncStatusResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="setWysylka">
+    	<wsdl:input message="tns:setWysylkaRequest"></wsdl:input>
+    	<wsdl:output message="tns:setWysylkaResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWysylka">
+    	<wsdl:documentation>Pobranie informacji i wysylc</wsdl:documentation>
+    	<wsdl:input message="tns:getWysylkaRequest"></wsdl:input>
+    	<wsdl:output message="tns:getWysylkaResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EPO_crzSOAP" type="tns:EPO_crz">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getSyncStatus">
+      <soap:operation soapAction="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/getSyncStatus"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EPO_crz">
+    <wsdl:port binding="tns:EPO_crzSOAP" name="EPO_crzSOAP">
+      <soap:address location="https://localhost:8080/EpoCrz"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

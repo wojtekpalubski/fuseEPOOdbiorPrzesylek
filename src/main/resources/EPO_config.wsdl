@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://epo.msgov.pl/config/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EPO_config" targetNamespace="http://epo.msgov.pl/config/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://epo.msgov.pl/config/">
+      <xsd:element name="getConfig">
+        <xsd:complexType>
+          <xsd:sequence>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getConfigResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+          	<xsd:element name="endpoint_url" type="xsd:string"
+          		minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				URL usługi MSEPO
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="user" type="xsd:string" minOccurs="1"
+          		maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Nazwa konta do polaczenia z MSEPO
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="haslo" type="xsd:string" minOccurs="1"
+          		maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Haslo uzytkownika do polaczenia z MSEPO
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="api_key" type="xsd:string"
+          		minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				API key do komunikacji z MSEPO
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="synch_margin" type="xsd:int"
+          		minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Margines synchronizacji w minutach
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="synch_interval" type="xsd:int"
+          		minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Interwal miedzy synchronizacjami w minutach
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="synch_saturday" type="xsd:boolean"
+          		minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Czy synchronizacja ma odbywac sie tez w soboty
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="synch_sunday" type="xsd:boolean"
+          		minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>
+          				Czy synchronizacja ma odbywac sie tez w
+          				niedziele
+          			</xsd:documentation>
+          		</xsd:annotation>
+          	</xsd:element>
+          	<xsd:element name="synch_suspended" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+          		<xsd:annotation>
+          			<xsd:documentation>Czy synchronizacja jest zatrzymana</xsd:documentation>
+          		</xsd:annotation></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getConfigRequest">
+    <wsdl:part element="tns:getConfig" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getConfigResponse">
+    <wsdl:part element="tns:getConfigResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="EPO_config">
+    <wsdl:operation name="getConfig">
+      <wsdl:documentation>Usluga pobrania konfiguracji polaczenia z MSEP</wsdl:documentation>
+      <wsdl:input message="tns:getConfigRequest"/>
+      <wsdl:output message="tns:getConfigResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EPO_configSOAP" type="tns:EPO_config">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getConfig">
+      <soap:operation soapAction="http://epo.msgov.pl/config/getConfig"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EPO_config">
+    <wsdl:port binding="tns:EPO_configSOAP" name="EPO_configSOAP">
+      <soap:address location="https://localhost:8080/EpoConfig"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
