@@ -47,6 +47,7 @@
 	<bean class="pl.ms.gov.eukw.epo.Hostinfo1RequestBean" id="Hostinfo1RequestBean" />
 	<bean class="pl.ms.gov.eukw.epo.Hostinfo2RequestBean" id="Hostinfo2RequestBean" />
 	<bean class="pl.ms.gov.eukw.epo.Response2Hostinfo2Processor" id="Response2Hostinfo2Processor" />
+	<bean class="pl.ms.gov.eukw.epo.EKNnumerPrzesylkiExtractorProcesor" id="EKNnumerPrzesylkiExtractorProcesor" />
 	<!-- <bean id="OdczytEKNzKolejkiErrorLogging" class="org.apache.camel.builder.LoggingErrorHandler"> 
 		<property name="logName" value="OdczytEKNzKolejkiError" /> <property name="level" 
 		value="ERROR" /> </bean> -->
@@ -91,6 +92,7 @@
 				<setHeader headerName="ZBIOR_GUID">
 					<simple>${body?.zbior.guid}</simple>
 				</setHeader>
+				<!-- <process ref="EKNnumerPrzesylkiExtractorProcesor"></process> -->
 				<log message="koniecKonwersjiEKNnaPOJO: ${headers.ZBIOR_GUID}" />
 				<to id="koniecOdbioruEKN" uri="log:koniecOdbioruEKN?showHeaders=true&amp;showBody=false" />
 				<doCatch>
@@ -99,7 +101,7 @@
 						<constant>false</constant>
 					</handled>
 					<log
-						message="BLAD konwersji XML na POJO: ${file:name}, wysylam do kolejki {{epo.sowkw.activemq.kolejka.sowkw.dlq}}" />
+						message="BLAD konwersji XML na Nadawca: ${file:name}, wysylam do kolejki {{epo.sowkw.activemq.kolejka.sowkw.dlq}}" />
 					<to id="zapisXMLDoKolejkiDLQ" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw.dlq}}" />
 				</doCatch>
 			</doTry>
@@ -122,6 +124,25 @@
 		<route id="PrzetwarzaniePrzesylki" autoStartup="true">
 			<from uri="direct:przetwarzaniePrzesylki" />
 			<log message="Przetwarzanie przesylki: ${body?.guid}" />
+			<setHeader headerName="operationName">
+				<constant>getHostinfo2</constant>
+			</setHeader>
+			<setHeader headerName="komunikat">
+				<simple>${header.ZBIOR_GUID}</simple>
+			</setHeader>
+			<setHeader headerName="komunikat2">
+				<simple>${body?.guid}</simple>
+			</setHeader>
+			<bean ref="Hostinfo2RequestBean" method="createSoapRequest" />
+			<marshal ref="hostinfoSoapJaxb" />
+			<to id="OdpowiedzGetHostinfo2Request" uri="log:OdpowiedzGetHostinfo2Request" />
+			<to id="WywolanieGetHostinfo2" uri="cxf:bean:KSIhostinfo2Endpoint?dataFormat=MESSAGE" />
+			<to id="OdpowiedzGetHostinfo2" uri="log:OdpowiedzGetHostinfo2" />
+			<unmarshal ref="hostinfoSoapJaxb" />
+			<to id="GetHostinfo2ResponseMessage" uri="log:Hostinfo2ResponseMessage" />
+			<bean ref="Hostinfo2RequestBean" method="procesSoapResponse" />
+			<process ref="Response2Hostinfo2Processor"></process>
+			<log message="Epoch: ${body?.epoch} freeMem: ${body?.freeMem}" logName="OdpowiedzHostinfo"/>
 			<to id="koniecPrzetwarzaniaPrzesylki"
 				uri="log:koniecPrzetwarzaniaPrzesylki?showHeaders=true&amp;showBody=true" />
 		</route>
