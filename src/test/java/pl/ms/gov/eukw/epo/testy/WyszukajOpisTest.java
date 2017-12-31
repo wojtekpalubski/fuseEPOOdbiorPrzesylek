@@ -1,10 +1,10 @@
-package fuseEPOOdbiorPrzesylek;
+package pl.ms.gov.eukw.epo.testy;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class EKNnumerPrzesylkiExtractorProcesor {
+public class WyszukajOpisTest {
 
 	@Test
 	public void test() {
