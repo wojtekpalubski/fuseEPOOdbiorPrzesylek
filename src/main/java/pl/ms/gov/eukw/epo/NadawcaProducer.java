@@ -10,7 +10,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class NadawcaProducer {
     Integer iloscPrzesylek=2;
 
-    String[] tablica = {"a", "b", "c"};
+    String[] miejscowosci = {"Warszawa", "Wrocław", "Kraków"};
+    String[] ulice={"Marszałkowska", "Czerniakowska", "al. Jerozolimskie"};
 
     public Nadawca utworzNadawce(){
         Nadawca n=new Nadawca();
@@ -18,13 +19,13 @@ public class NadawcaProducer {
         n.setStruktura("struktura");
         n.setZrodlo("zrodlo");
         n.setNIP("nip");
-        n.setKod("kod");
+        n.setKod(Integer.toString(wylosujInteger(10,99))+"-"+Integer.toString(wylosujInteger(100,999)));
         n.setLokal("lokal");
-        n.setMiejscowosc("Warszawa");
+        n.setMiejscowosc(wylosujElementtablicy(miejscowosci));
         n.setNazwa("nazwa");
         n.setNazwaSkrocona("nazwa skrocona");
-        n.setDom("1");
-        n.setUlica("ulica");
+        n.setDom(Integer.toString(wylosujInteger(1,100)));
+        n.setUlica(wylosujElementtablicy(ulice));
 
         n.setZbior(utworzZbior());
         return n;

@@ -3,232 +3,252 @@
 	amqsowkw -->
 <!-- Configures the Camel Context -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
-	xsi:schemaLocation="          
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xsi:schemaLocation="
 	http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd          
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd 
 	http://camel.apache.org/schema/cxf
 	http://camel.apache.org/schema/cxf/camel-cxf.xsd">
-	<bean class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer"
-		id="bridgePropertyPlaceholder">
-		<property name="locations">
-			<list>
-				<value>classpath:/EPO-sowkw.properties</value>
-				<value>file:${karaf.home}/etc/EPO-sowkw.properties</value>
-				<value>file:${karaf.home}/instances/${karaf.name}/etc/EPO-sowkw.properties
-				</value>
-			</list>
-		</property>
-		<property name="ignoreResourceNotFound" value="true" />
-	</bean>
-	<bean class="org.apache.activemq.camel.component.ActiveMQComponent"
-		id="activemq">
-		<!-- <property name="brokerURL" value="tcp://localhost:61617" /> <property 
-			name="brokerURL" value="tcp://172.25.117.888:61716"/> -->
-		<property name="brokerURL"
-			value="tcp://${epo.sowkw.activemq.host}:${epo.sowkw.activemq.port}" />
-	</bean>
+    <bean class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer"
+          id="bridgePropertyPlaceholder">
+        <property name="locations">
+            <list>
+                <value>classpath:/EPO-sowkw.properties</value>
+                <value>file:${karaf.home}/etc/EPO-sowkw.properties</value>
+                <value>file:${karaf.home}/instances/${karaf.name}/etc/EPO-sowkw.properties
+                </value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent"
+          id="activemq">
+        <!-- <property name="brokerURL" value="tcp://localhost:61617" /> <property
+            name="brokerURL" value="tcp://172.25.117.888:61716"/> -->
+        <property name="brokerURL"
+                  value="tcp://${epo.sowkw.activemq.host}:${epo.sowkw.activemq.port}"/>
+    </bean>
 
-	<!-- <import resource="classpath:META-INF/cxf/cxf.xml" /> <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" 
-		/> <import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" 
-		/> -->
-	<cxf:cxfEndpoint id="KSIhostinfoEndpoint"
-		address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
-		wsdlURL="ksi-soap-hostinfo-api.wsdl" serviceName="ws:hostinfo"
-		endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/" />
-	<cxf:cxfEndpoint id="KSIhostinfo2Endpoint"
-		address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
-		wsdlURL="ksi-soap-hostinfo-api2.wsdl" serviceName="ws:hostinfo"
-		endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/" />
-	<bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoProcessor" id="przygotujHostinfoParametry" />
-	<bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoEnricher" id="przygotujHostinfoParametryEnricher" />
-	<bean class="pl.ms.gov.eukw.epo.Hostinfo1RequestBean" id="Hostinfo1RequestBean" />
-	<bean class="pl.ms.gov.eukw.epo.Hostinfo2RequestBean" id="Hostinfo2RequestBean" />
-	<bean class="pl.ms.gov.eukw.epo.Response2Hostinfo2Processor" id="Response2Hostinfo2Processor" />
-	<bean class="pl.ms.gov.eukw.epo.EKNnumerPrzesylkiExtractorProcesor" id="EKNnumerPrzesylkiExtractorProcesor" />
-	<!-- <bean id="OdczytEKNzKolejkiErrorLogging" class="org.apache.camel.builder.LoggingErrorHandler"> 
-		<property name="logName" value="OdczytEKNzKolejkiError" /> <property name="level" 
-		value="ERROR" /> </bean> -->
+    <!-- <import resource="classpath:META-INF/cxf/cxf.xml" /> <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"
+        /> <import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml"
+        /> -->
+    <cxf:cxfEndpoint id="KSIhostinfoEndpoint"
+                     address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
+                     wsdlURL="ksi-soap-hostinfo-api.wsdl" serviceName="ws:hostinfo"
+                     endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/"/>
+    <cxf:cxfEndpoint id="KSIhostinfo2Endpoint"
+                     address="http://localhost:8082/services/hostinfo" serviceClass="pl.asseco.IHostinfoService"
+                     wsdlURL="ksi-soap-hostinfo-api2.wsdl" serviceName="ws:hostinfo"
+                     endpointName="ws:HostinfoServicePort" xmlns:ws="http://asseco.pl/"/>
+    <bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoProcessor" id="przygotujHostinfoParametry"/>
+    <bean class="pl.ms.gov.eukw.epo.PrzygotujKSIhostinfoEnricher" id="przygotujHostinfoParametryEnricher"/>
+    <bean class="pl.ms.gov.eukw.epo.Hostinfo1RequestBean" id="Hostinfo1RequestBean"/>
+    <bean class="pl.ms.gov.eukw.epo.Hostinfo2RequestBean" id="Hostinfo2RequestBean"/>
+    <bean class="pl.ms.gov.eukw.epo.Response2Hostinfo2Processor" id="Response2Hostinfo2Processor"/>
+    <bean class="pl.ms.gov.eukw.epo.EKNnumerPrzesylkiExtractorProcesor" id="EKNnumerPrzesylkiExtractorProcesor"/>
+    <bean class="pl.ms.gov.eukw.epo.NadawcaProducer" id="NadawcaProducer"/>
+    <!-- <bean id="OdczytEKNzKolejkiErrorLogging" class="org.apache.camel.builder.LoggingErrorHandler">
+        <property name="logName" value="OdczytEKNzKolejkiError" /> <property name="level"
+        value="ERROR" /> </bean> -->
 
-	<camelContext id="_EPOOdbiorPrzesylkiContext" xmlns="http://camel.apache.org/schema/spring">
-		<dataFormats>
-			<jaxb contextPath="pl.ms.gov.eukw.epo" id="epoJaxb"
-				ignoreJAXBElement="true" prettyPrint="true" />
-			<soapjaxb contextPath="pl.asseco" id="hostinfoSoapJaxb" />
-			<!-- <jaxb contextPath="pl.asseco" id="hostinfoJaxb"/> -->
-		</dataFormats>
-		<!-- <errorHandler id="DdczytEKNzKolejkiErrorLogging" type="LoggingErrorHandler" 
-			level="ERROR" logName="OdczytEKNzKolejkiError" route="aaaa" /> <errorHandler 
-			id="KonwersjaXMLnaPOJOErrorLogging" type="LoggingErrorHandler" level="ERROR" 
-			logName="KonwersjaXMLnaPOJOError" /> -->
+    <camelContext id="_EPOOdbiorPrzesylkiContext" xmlns="http://camel.apache.org/schema/spring">
 
-		<route id="KopiowaniePlikuEKNDoKolejkiRoute" autoStartup="true">
-			<from id="odczytEKNzPliku"
-				uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000"></from>
-			<log message="Zbior wejsciowy: ${file:name}" />
-			<!-- jak ustawic replyTo? -->
-			<setHeader headerName="JMSReplyTo">
-				<simple>DQWE</simple>
-			</setHeader>
-			<to id="zapisZbioruDoKolejki"
-				uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw}}?replyTo=DQQQ" />
-		</route>
+        <dataFormats>
+            <jaxb contextPath="pl.ms.gov.eukw.epo" id="epoJaxb"
+                  ignoreJAXBElement="true" prettyPrint="true"/>
+            <soapjaxb contextPath="pl.asseco" id="hostinfoSoapJaxb"/>
+            <!-- <jaxb contextPath="pl.asseco" id="hostinfoJaxb"/> -->
+        </dataFormats>
+        <!-- <errorHandler id="DdczytEKNzKolejkiErrorLogging" type="LoggingErrorHandler"
+            level="ERROR" logName="OdczytEKNzKolejkiError" route="aaaa" /> <errorHandler
+            id="KonwersjaXMLnaPOJOErrorLogging" type="LoggingErrorHandler" level="ERROR"
+            logName="KonwersjaXMLnaPOJOError" /> -->
 
-		<route id="OdbiorEKNzKolejkiRoute" autoStartup="true">
-			<from id="odczytEKNzKolejki" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw}}" />
-			<log id="JMSReplyTo" message="replyto=${header.JMSReplyTo}" />
-			<to id="KonwersjaXMLnaPOJO"
-				uri="log:KonwersjaXMLnaPOJO?showHeaders=false&amp;showBody=false" />
-			<to uri="direct:odczytaneZKolejki" />
-		</route>
+        <route id="KopiowaniePlikuEKNDoKolejkiRoute" autoStartup="false">
+            <from id="odczytEKNzPliku"
+                  uri="file:D:\dane\projekty\camel\cmlhelo\xml\epowe?delay=10000"></from>
+            <log message="Zbior wejsciowy: ${file:name}"/>
+            <!-- jak ustawic replyTo? -->
+            <setHeader headerName="JMSReplyTo">
+                <simple>DQWE</simple>
+            </setHeader>
+            <to id="zapisZbioruDoKolejki"
+                uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw}}?replyTo=DQQQ"/>
+        </route>
 
-		<route id="KonwersjaXMLnaPOJORoute" autoStartup="true">
-			<from uri="direct:odczytaneZKolejki" />
-			<doTry>
-				<unmarshal id="_konwersjaXML2POJO" ref="epoJaxb" />
-				<!-- Message w formacie POJO klasy Nadawca -->
-				<setHeader headerName="ZBIOR_GUID">
-					<simple>${body?.zbior.guid}</simple>
-				</setHeader>
-				<!-- <process ref="EKNnumerPrzesylkiExtractorProcesor"></process> -->
-				<log message="koniecKonwersjiEKNnaPOJO: ${headers.ZBIOR_GUID}" />
-				<to id="koniecOdbioruEKN" uri="log:koniecOdbioruEKN?showHeaders=true&amp;showBody=false" />
-				<doCatch>
-					<exception>javax.xml.bind.UnmarshalException</exception>
-					<handled>
-						<constant>false</constant>
-					</handled>
-					<log
-						message="BLAD konwersji XML na Nadawca: ${file:name}, wysylam do kolejki {{epo.sowkw.activemq.kolejka.sowkw.dlq}}" />
-					<to id="zapisXMLDoKolejkiDLQ" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw.dlq}}" />
-				</doCatch>
-			</doTry>
-			<to uri="direct:kolejka2przetwarzanie" />
-		</route>
+        <route id="OdbiorEKNzKolejkiRoute" autoStartup="false">
+            <from id="odczytEKNzKolejki" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw}}"/>
+            <log id="JMSReplyTo" message="replyto=${header.JMSReplyTo}"/>
+            <to id="KonwersjaXMLnaPOJO"
+                uri="log:KonwersjaXMLnaPOJO?showHeaders=false&amp;showBody=false"/>
+            <to uri="direct:odczytaneZKolejki"/>
+        </route>
 
-		<route id="PrzetwarzanieEKN" autoStartup="true">
-			<from uri="direct:kolejka2przetwarzanie" />
-			<log message="Przetwarzanie EKN: ${body?.zbior?.guid}" />
-			<split>
-				<simple>${body.zbior.przesylkaEPO}</simple>
-				<to id="pojedynczaPrzesylka_EKN"
-					uri="log:pojedynczaPrzesylka?showHeaders=false&amp;showBody=false" />
-				<to uri="direct:przetwarzaniePrzesylki" />
-			</split>
-			<to id="koniecPrzetwarzaniaEKN"
-				uri="log:koniecPrzetwarzaniaEKN?showHeaders=true&amp;showBody=true" />
-		</route>
+        <route id="KonwersjaXMLnaPOJORoute" autoStartup="false">
+            <from uri="direct:odczytaneZKolejki"/>
+            <doTry>
+                <unmarshal id="_konwersjaXML2POJO" ref="epoJaxb"/>
+                <!-- Message w formacie POJO klasy Nadawca -->
+                <setHeader headerName="ZBIOR_GUID">
+                    <simple>${body?.zbior.guid}</simple>
+                </setHeader>
+                <!-- <process ref="EKNnumerPrzesylkiExtractorProcesor"></process> -->
+                <log message="koniecKonwersjiEKNnaPOJO: ${headers.ZBIOR_GUID}"/>
+                <to id="koniecOdbioruEKN" uri="log:koniecOdbioruEKN?showHeaders=true&amp;showBody=false"/>
+                <doCatch>
+                    <exception>javax.xml.bind.UnmarshalException</exception>
+                    <handled>
+                        <constant>false</constant>
+                    </handled>
+                    <log
+                            message="BLAD konwersji XML na Nadawca: ${file:name}, wysylam do kolejki {{epo.sowkw.activemq.kolejka.sowkw.dlq}}"/>
+                    <to id="zapisXMLDoKolejkiDLQ" uri="activemq:queue:{{epo.sowkw.activemq.kolejka.sowkw.dlq}}"/>
+                </doCatch>
+            </doTry>
+            <to uri="direct:kolejka2przetwarzanie"/>
+        </route>
 
-		<route id="PrzetwarzaniePrzesylki" autoStartup="true">
-			<from uri="direct:przetwarzaniePrzesylki" />
-			<log message="Przetwarzanie przesylki: ${body?.guid}" />
-			<setHeader headerName="operationName">
-				<constant>getHostinfo2</constant>
-			</setHeader>
-			<setHeader headerName="komunikat">
-				<simple>${header.ZBIOR_GUID}</simple>
-			</setHeader>
-			<setHeader headerName="komunikat2">
-				<simple>${body?.guid}</simple>
-			</setHeader>
-			<bean ref="Hostinfo2RequestBean" method="createSoapRequest" />
-			<marshal ref="hostinfoSoapJaxb" />
-			<to id="OdpowiedzGetHostinfo2Request" uri="log:OdpowiedzGetHostinfo2Request" />
-			<to id="WywolanieGetHostinfo2" uri="cxf:bean:KSIhostinfo2Endpoint?dataFormat=MESSAGE" />
-			<to id="OdpowiedzGetHostinfo2" uri="log:OdpowiedzGetHostinfo2" />
-			<unmarshal ref="hostinfoSoapJaxb" />
-			<to id="GetHostinfo2ResponseMessage" uri="log:Hostinfo2ResponseMessage" />
-			<bean ref="Hostinfo2RequestBean" method="procesSoapResponse" />
-			<process ref="Response2Hostinfo2Processor"></process>
-			<log message="Epoch: ${body?.epoch} freeMem: ${body?.freeMem}" logName="OdpowiedzHostinfo"/>
-			<to id="koniecPrzetwarzaniaPrzesylki"
-				uri="log:koniecPrzetwarzaniaPrzesylki?showHeaders=true&amp;showBody=true" />
-		</route>
+        <route id="PrzetwarzanieEKN" autoStartup="false">
+            <from uri="direct:kolejka2przetwarzanie"/>
+            <log message="Przetwarzanie EKN: ${body?.zbior?.guid}"/>
+            <split>
+                <simple>${body.zbior.przesylkaEPO}</simple>
+                <to id="pojedynczaPrzesylka_EKN"
+                    uri="log:pojedynczaPrzesylka?showHeaders=false&amp;showBody=false"/>
+                <to uri="direct:przetwarzaniePrzesylki"/>
+            </split>
+            <to id="koniecPrzetwarzaniaEKN"
+                uri="log:koniecPrzetwarzaniaEKN?showHeaders=true&amp;showBody=true"/>
+        </route>
+
+        <route id="PrzetwarzaniePrzesylki" autoStartup="false">
+            <from uri="direct:przetwarzaniePrzesylki"/>
+            <log message="Przetwarzanie przesylki: ${body?.guid}"/>
+            <setHeader headerName="operationName">
+                <constant>getHostinfo2</constant>
+            </setHeader>
+            <setHeader headerName="komunikat">
+                <simple>${header.ZBIOR_GUID}</simple>
+            </setHeader>
+            <setHeader headerName="komunikat2">
+                <simple>${body?.guid}</simple>
+            </setHeader>
+            <bean ref="Hostinfo2RequestBean" method="createSoapRequest"/>
+            <marshal ref="hostinfoSoapJaxb"/>
+            <to id="OdpowiedzGetHostinfo2Request" uri="log:OdpowiedzGetHostinfo2Request"/>
+            <to id="WywolanieGetHostinfo2" uri="cxf:bean:KSIhostinfo2Endpoint?dataFormat=MESSAGE"/>
+            <to id="OdpowiedzGetHostinfo2" uri="log:OdpowiedzGetHostinfo2"/>
+            <unmarshal ref="hostinfoSoapJaxb"/>
+            <to id="GetHostinfo2ResponseMessage" uri="log:Hostinfo2ResponseMessage"/>
+            <bean ref="Hostinfo2RequestBean" method="procesSoapResponse"/>
+            <process ref="Response2Hostinfo2Processor"></process>
+            <log message="Epoch: ${body?.epoch} freeMem: ${body?.freeMem}" logName="OdpowiedzHostinfo"/>
+            <to id="koniecPrzetwarzaniaPrzesylki"
+                uri="log:koniecPrzetwarzaniaPrzesylki?showHeaders=true&amp;showBody=true"/>
+        </route>
 
 
-		<route id="_callKSIhostinfo1message" autoStartup="false">
-			<from id="hostinfoTimer" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1" />
-			<!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt 
-				z wejsciowej kolejki XML z SOWKW</description> </from> -->
-			<to id="odebraneZkolejkiEPO" uri="log:odebraneZkolejkiEPO" />
-			<setHeader headerName="operationName">
-				<constant>getHostinfo1</constant>
-			</setHeader>
-			<setHeader headerName="komunikat">
-				<constant>kom</constant>
-			</setHeader>
-			<!-- <setHeader headerName="komunikat2"> <constant>kom2</constant> </setHeader> -->
-			<setBody>
-				<simple>${header.JMSReplyTo}</simple>
-			</setBody>
-			<!-- <to id="poKSIhostinfoReply" uri="log:poKSIhostinfoReply" /> <process 
-				id="przygotujHostinfoParametry" ref="przygotujHostinfoParametry" /> <to id="poKSIhostinfoProcesor" 
-				uri="log:poKSIhostinfoProcesor" /> <setBody><simple>3456ytgfds</simple></setBody> 
-				<to uri="bean:przygotujHostinfoParametryEnricher" /> <to id="poenrichBean" 
-				uri="log:poenrichBean" /> -->
+        <route id="_callKSIhostinfo1message" autoStartup="false">
+            <from id="hostinfoTimer" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1"/>
+            <!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt
+                z wejsciowej kolejki XML z SOWKW</description> </from> -->
+            <to id="odebraneZkolejkiEPO" uri="log:odebraneZkolejkiEPO"/>
+            <setHeader headerName="operationName">
+                <constant>getHostinfo1</constant>
+            </setHeader>
+            <setHeader headerName="komunikat">
+                <constant>kom</constant>
+            </setHeader>
+            <!-- <setHeader headerName="komunikat2"> <constant>kom2</constant> </setHeader> -->
+            <setBody>
+                <simple>${header.JMSReplyTo}</simple>
+            </setBody>
+            <!-- <to id="poKSIhostinfoReply" uri="log:poKSIhostinfoReply" /> <process
+                id="przygotujHostinfoParametry" ref="przygotujHostinfoParametry" /> <to id="poKSIhostinfoProcesor"
+                uri="log:poKSIhostinfoProcesor" /> <setBody><simple>3456ytgfds</simple></setBody>
+                <to uri="bean:przygotujHostinfoParametryEnricher" /> <to id="poenrichBean"
+                uri="log:poenrichBean" /> -->
 
-			<bean ref="Hostinfo1RequestBean" method="createSoapBody" />
-			<marshal ref="hostinfoSoapJaxb" />
-			<to id="poHostinfoRequestBean" uri="log:HostinfoRequestBean" />
-			<to id="callKSIhostinfo" uri="cxf:bean:KSIhostinfoEndpoint?dataFormat=MESSAGE" />
-			<to id="wynikKSIhostinfo" uri="log:wynikKSIhostinfo" />
-			<!-- <log message="${body.getAdres()}"/> -->
-			<!-- <setBody><simple>${body.getAdres()}</simple></setBody> -->
-			<log message="${body}" />
-		</route>
+            <bean ref="Hostinfo1RequestBean" method="createSoapBody"/>
+            <marshal ref="hostinfoSoapJaxb"/>
+            <to id="poHostinfoRequestBean" uri="log:HostinfoRequestBean"/>
+            <to id="callKSIhostinfo" uri="cxf:bean:KSIhostinfoEndpoint?dataFormat=MESSAGE"/>
+            <to id="wynikKSIhostinfo" uri="log:wynikKSIhostinfo"/>
+            <!-- <log message="${body.getAdres()}"/> -->
+            <!-- <setBody><simple>${body.getAdres()}</simple></setBody> -->
+            <log message="${body}"/>
+        </route>
 
-		<route id="_callKSIhostinfo2message" autoStartup="false">
-			<from id="hostinfo2Timer" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1" />
-			<to id="odebraneZtimera2message" uri="log:odebraneZtimera2message" />
-			<setHeader headerName="operationName">
-				<constant>getHostinfo2</constant>
-			</setHeader>
-			<setHeader headerName="komunikat">
-				<constant>kom</constant>
-			</setHeader>
-			<setHeader headerName="komunikat2">
-				<constant>kom2</constant>
-			</setHeader>
-			<!-- <setBody> <simple>${header.JMSReplyTo}</simple> </setBody> -->
+        <route id="_callKSIhostinfo2message" autoStartup="false">
+            <from id="hostinfo2Timer" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1"/>
+            <to id="odebraneZtimera2message" uri="log:odebraneZtimera2message"/>
+            <setHeader headerName="operationName">
+                <constant>getHostinfo2</constant>
+            </setHeader>
+            <setHeader headerName="komunikat">
+                <constant>kom</constant>
+            </setHeader>
+            <setHeader headerName="komunikat2">
+                <constant>kom2</constant>
+            </setHeader>
+            <!-- <setBody> <simple>${header.JMSReplyTo}</simple> </setBody> -->
 
-			<bean ref="Hostinfo2RequestBean" method="createSoapRequest" />
-			<marshal ref="hostinfoSoapJaxb" />
-			<to id="Hostinfo2Request" uri="log:Hostinfo2Request" />
-			<to id="callKSIhostinfo2message" uri="cxf:bean:KSIhostinfo2Endpoint?dataFormat=MESSAGE" />
-			<to id="Hostinfo2Response" uri="log:Hostinfo2Response" />
-			<!-- <log message="${body}" /> -->
-			<unmarshal ref="hostinfoSoapJaxb" />
-			<to id="Hostinfo2ResponseMessage" uri="log:Hostinfo2ResponseMessage" />
-			<bean ref="Hostinfo2RequestBean" method="procesSoapResponse" />
-			<process ref="Response2Hostinfo2Processor"></process>
-			<log message="Epoch: ${body?.epoch} freeMem: ${body?.freeMem}" />
-		</route>
+            <bean ref="Hostinfo2RequestBean" method="createSoapRequest"/>
+            <marshal ref="hostinfoSoapJaxb"/>
+            <to id="Hostinfo2Request" uri="log:Hostinfo2Request"/>
+            <to id="callKSIhostinfo2message" uri="cxf:bean:KSIhostinfo2Endpoint?dataFormat=MESSAGE"/>
+            <to id="Hostinfo2Response" uri="log:Hostinfo2Response"/>
+            <!-- <log message="${body}" /> -->
+            <unmarshal ref="hostinfoSoapJaxb"/>
+            <to id="Hostinfo2ResponseMessage" uri="log:Hostinfo2ResponseMessage"/>
+            <bean ref="Hostinfo2RequestBean" method="procesSoapResponse"/>
+            <process ref="Response2Hostinfo2Processor"></process>
+            <log message="Epoch: ${body?.epoch} freeMem: ${body?.freeMem}"/>
+        </route>
 
-		<route id="_callKSIhostinfo2pojo" autoStartup="false">
-			<from id="hostinfoTimer2" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1" />
-			<!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt 
-				z wejsciowej kolejki XML z SOWKW</description> </from> -->
-			<to id="odebraneZkolejkiEPO2" uri="log:odebraneZkolejkiEPO2" />
-			<setHeader headerName="operationName">
-				<constant>getHostinfo2</constant>
-			</setHeader>
-			<setHeader headerName="komunikat">
-				<constant>kom</constant>
-			</setHeader>
-			<setHeader headerName="komunikat2">
-				<constant>kom2</constant>
-			</setHeader>
-			<to id="poUstawieniuHeaderow" uri="log:poUstawieniuHeaderow" />
-			<bean ref="Hostinfo2RequestBean" method="createSoapRequest"
-				id="tworzenieRequestHostinfo2" />
-			<to id="poHostinfo2RequestBean" uri="log:poHostinfo2RequestBean" />
-			<to id="callKSIhostinfo2"
-				uri="cxf:bean:KSIhostinfo2Endpoint?defaultOperationName=getHostinfo2&amp;dataFormat=POJO" />
-			<to id="wynikKSIhostinfo2" uri="log:wynikKSIhostinfo" />
 
-			<log message="${body}" />
-		</route>
-	</camelContext>
+
+        <route id="_callKSIhostinfo2pojo" autoStartup="false">
+            <from id="hostinfoTimer2" uri="timer:timerKSIhostinfo?period=10000&amp;repeatCount=1"/>
+            <!-- <from id="ZkolejkiEPOWe2" uri="activemq:queue:EPO.WE2"> <description>Odczyt
+                z wejsciowej kolejki XML z SOWKW</description> </from> -->
+            <to id="odebraneZkolejkiEPO2" uri="log:odebraneZkolejkiEPO2"/>
+            <setHeader headerName="operationName">
+                <constant>getHostinfo2</constant>
+            </setHeader>
+            <setHeader headerName="komunikat">
+                <constant>kom</constant>
+            </setHeader>
+            <setHeader headerName="komunikat2">
+                <constant>kom2</constant>
+            </setHeader>
+            <to id="poUstawieniuHeaderow" uri="log:poUstawieniuHeaderow"/>
+            <bean ref="Hostinfo2RequestBean" method="createSoapRequest"
+                  id="tworzenieRequestHostinfo2"/>
+            <to id="poHostinfo2RequestBean" uri="log:poHostinfo2RequestBean"/>
+            <to id="callKSIhostinfo2"
+                uri="cxf:bean:KSIhostinfo2Endpoint?defaultOperationName=getHostinfo2&amp;dataFormat=POJO"/>
+            <to id="wynikKSIhostinfo2" uri="log:wynikKSIhostinfo"/>
+
+            <log message="${body}"/>
+        </route>
+
+
+        <route id="tworzNadawceRestRoute" autoStartup="true">
+            <from uri="restlet:http://localhost:8089/tworzNadawce?restletMethod=GET"/>
+            <log message="Wywolano resta tworzNadawce"/>
+            <to uri="direct:utworzNadawce"/>
+        </route>
+        <route id="NadawcaProducerRoute" autoStartup="true">
+            <!--<from uri="timer:nadawcaTimer?repeatCount=1"/>-->
+            <from uri="direct:utworzNadawce"/>
+            <bean ref="NadawcaProducer" method="utworzNadawce"/>
+            <marshal ref="epoJaxb"/>
+            <to uri="log:WyprodukowanyNadawca"/>
+        </route>
+
+
+    </camelContext>
 </beans>
