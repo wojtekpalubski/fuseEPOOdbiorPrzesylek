@@ -205,7 +205,7 @@
 				<version>2.2.10</version>
 				<executions>
 					<execution>
-						<id>generate-sources</id>
+						<id>generate-sources-ksi-soap-hostinfo</id>
 						<phase>generate-sources</phase>
 						<configuration>
 							<sourceRoot>
@@ -215,6 +215,28 @@
 								<wsdlOption>
 									<wsdl>
 										${basedir}/src/main/resources/ksi-soap-hostinfo-api2.wsdl
+									</wsdl>
+									<extraargs>
+										<extraarg>-impl</extraarg>
+									</extraargs>
+								</wsdlOption>
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-sources-EPO_crz</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<sourceRoot>
+								${basedir}/target/generated/src/main/java
+							</sourceRoot>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>
+										${basedir}/src/main/resources/EPO_crz.wsdl
 									</wsdl>
 									<extraargs>
 										<extraarg>-impl</extraarg>

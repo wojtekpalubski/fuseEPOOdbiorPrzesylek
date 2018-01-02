@@ -1,183 +1,253 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://epo.ms.gov.pl/crz/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EPO_crz" targetNamespace="http://epo.ms.gov.pl/crz/">
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="EUKWKomponentMsepoImplService" targetNamespace="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://epo.ms.gov.pl/crz/">
-      <xsd:element name="getSyncStatus">
-        <xsd:complexType>
-          <xsd:sequence>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="getSyncStatusResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-          	<xsd:element name="data_rozpoczecia" type="xsd:dateTime"
-          		minOccurs="0" maxOccurs="1">
-          		<xsd:annotation>
-          			<xsd:documentation>
-          				Data_czas rozpoczecia ostatniego poprawnego	pobrania informacji zwrotnej
-          			</xsd:documentation>
-          		</xsd:annotation>
-          	</xsd:element>
-          	<xsd:element name="data_zakonczenia" type="xsd:dateTime" minOccurs="0" maxOccurs="1">
-          		<xsd:annotation>
-          			<xsd:documentation>Data_czas zakonczenia ostatniego poprawnego pobrania informacji zwrotnej</xsd:documentation>
-          		</xsd:annotation></xsd:element>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="setWysylka">
-      	<xsd:complexType>
-      		<xsd:sequence>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/" targetNamespace="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/" version="1.0">
 
-      			<xsd:element name="czas" type="xsd:dateTime"
-      				minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						Data i czas wysylki
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="EKN_GUID" type="xsd:string"
-      				minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						GUID ksiazki nadawczej
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="WKW_ID" type="xsd:string"
-      				minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						Identyfikator xrodlowego WKW przesylki,
-      						jednczesnie fragmen nazwy kolejki zwrotnej
-      						do WKW
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="PRZESYLKA_GUID" type="xsd:string"
-      				minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						GUID przesylki
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="PRZESYLKA_NR" type="xsd:string"
-      				minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						Numer przesylki (fragment z pola opis
-      						przesylki w XML)
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="EKN_DATA_UTWORZENIA"
-      				type="xsd:dateTime" minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						Data_czas utworzenia EKN (atrybut
-      						DataUtworzenia Zbioru z XML)
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="EKN_DATA_WYSLANIA"
-      				type="xsd:dateTime" minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>
-      						Data nadania EKN do MSEPO
-      					</xsd:documentation>
-      				</xsd:annotation>
-      			</xsd:element>
-      			<xsd:element name="EKN_STATUS" type="xsd:string" minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>Status EKN (np. Nadana, czy wszystkie przesylki dla EKN zostaly nadane)</xsd:documentation>
-      				</xsd:annotation></xsd:element>
-      		</xsd:sequence>
-      	</xsd:complexType>
-      </xsd:element>
-      <xsd:element name="setWysylkaResponse">
-      	<xsd:complexType>
-      		<xsd:sequence>
+  <xs:element name="ValidationError" type="tns:validationError"/>
 
-      			<xsd:element name="status" type="xsd:boolean" minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>Status zapisu informacji o wysylce do bazy danych</xsd:documentation>
-      				</xsd:annotation></xsd:element>
-      		</xsd:sequence>
-      	</xsd:complexType>
-      </xsd:element>
-      <xsd:element name="getWysylka">
-      	<xsd:complexType>
-      		<xsd:sequence>
+  <xs:element name="ValidationException">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="validationException" type="tns:validationResults"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 
-      			<xsd:element name="PRZESYLKA_GUID" type="xsd:string" minOccurs="1" maxOccurs="1">
-      				<xsd:annotation>
-      					<xsd:documentation>GUID przesylki, ktorej dane trzeba pobrac</xsd:documentation>
-      				</xsd:annotation></xsd:element>
-      		</xsd:sequence>
-      	</xsd:complexType>
-      </xsd:element>
-      <xsd:element name="getWysylkaResponse">
-      	<xsd:complexType>
-      		<xsd:sequence>
+  <xs:element name="ValidationResults" type="tns:validationResults"/>
 
-      			<xsd:element name="out" type="xsd:string"></xsd:element>
-      		</xsd:sequence>
-      	</xsd:complexType>
-      </xsd:element>
-    </xsd:schema>
+  <xs:element name="dodajSyncStatus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="parametry" type="tns:syncStatus"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="dodajSyncStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="wynik" type="tns:statusDodania"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="dodajWysylke">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="parametry" type="tns:wysylka"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="dodajWysylkeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="wynik" type="tns:statusDodania"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="pobierzSyncStatus">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="pobierzSyncStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="wynik" type="tns:syncStatus"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="pobierzWysylke">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="parametry" type="tns:przesylkaGuid"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="pobierzWysylkeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="0" name="wynik" nillable="true" type="tns:wysylka"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="syncStatus">
+    <xs:sequence>
+      <xs:element name="dataRozpoczecia" type="xs:dateTime"/>
+      <xs:element name="dataZakonczenia" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validationResults">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="errors" nillable="true" type="tns:validationError"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validationError">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="field" type="xs:string"/>
+      <xs:element minOccurs="0" name="value" type="xs:anyType"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="statusDodania">
+    <xs:sequence>
+      <xs:element name="status" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="wysylka">
+    <xs:sequence>
+      <xs:element name="czas" type="xs:dateTime"/>
+      <xs:element name="eknGuid" type="xs:string"/>
+      <xs:element name="wkwId" type="xs:string"/>
+      <xs:element name="przesylkaGuid" type="xs:string"/>
+      <xs:element name="przesylkaNumer" type="xs:string"/>
+      <xs:element name="eknDatautworzenia" type="xs:dateTime"/>
+      <xs:element name="eknDataWyslania" type="xs:dateTime"/>
+      <xs:element name="eknStatus" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="przesylkaGuid">
+    <xs:sequence>
+      <xs:element name="przesylkaGuid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
   </wsdl:types>
-  <wsdl:message name="getSyncStatusRequest">
-    <wsdl:part element="tns:getSyncStatus" name="parameters"/>
+  <wsdl:message name="pobierzWysylkeResponse">
+    <wsdl:part element="tns:pobierzWysylkeResponse" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getSyncStatusResponse">
-    <wsdl:part element="tns:getSyncStatusResponse" name="parameters" />
+  <wsdl:message name="dodajSyncStatusResponse">
+    <wsdl:part element="tns:dodajSyncStatusResponse" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="setWysylkaRequest">
-  	<wsdl:part name="parameters" element="tns:setWysylka"></wsdl:part>
+  <wsdl:message name="dodajSyncStatus">
+    <wsdl:part element="tns:dodajSyncStatus" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="setWysylkaResponse">
-  	<wsdl:part name="parameters" element="tns:setWysylkaResponse"></wsdl:part>
+  <wsdl:message name="ValidationExceptionFault">
+    <wsdl:part element="tns:ValidationException" name="ValidationExceptionFault">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getWysylkaRequest">
-  	<wsdl:part name="parameters" element="tns:getWysylka"></wsdl:part>
+  <wsdl:message name="pobierzWysylke">
+    <wsdl:part element="tns:pobierzWysylke" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getWysylkaResponse">
-  	<wsdl:part name="parameters" element="tns:setWysylka"></wsdl:part>
+  <wsdl:message name="dodajWysylkeResponse">
+    <wsdl:part element="tns:dodajWysylkeResponse" name="parameters">
+    </wsdl:part>
   </wsdl:message>
-  <wsdl:portType name="EPO_crz">
-    <wsdl:operation name="getSyncStatus">
-      <wsdl:documentation>Operacja pobrania daty ostatniego poprawnego rozpoczecia i zakonczenia pobrania informacji zwrotnej z MSEP</wsdl:documentation>
-      <wsdl:input message="tns:getSyncStatusRequest"/>
-      <wsdl:output message="tns:getSyncStatusResponse"/>
+  <wsdl:message name="dodajWysylke">
+    <wsdl:part element="tns:dodajWysylke" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="pobierzSyncStatus">
+    <wsdl:part element="tns:pobierzSyncStatus" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="pobierzSyncStatusResponse">
+    <wsdl:part element="tns:pobierzSyncStatusResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="EUKWKomponentMsepo">
+    <wsdl:operation name="pobierzSyncStatus">
+      <wsdl:input message="tns:pobierzSyncStatus" name="pobierzSyncStatus">
+    </wsdl:input>
+      <wsdl:output message="tns:pobierzSyncStatusResponse" name="pobierzSyncStatusResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ValidationExceptionFault" name="ValidationExceptionFault">
+    </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="setWysylka">
-    	<wsdl:input message="tns:setWysylkaRequest"></wsdl:input>
-    	<wsdl:output message="tns:setWysylkaResponse"></wsdl:output>
+    <wsdl:operation name="dodajSyncStatus">
+      <wsdl:input message="tns:dodajSyncStatus" name="dodajSyncStatus">
+    </wsdl:input>
+      <wsdl:output message="tns:dodajSyncStatusResponse" name="dodajSyncStatusResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ValidationExceptionFault" name="ValidationExceptionFault">
+    </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="getWysylka">
-    	<wsdl:documentation>Pobranie informacji i wysylc</wsdl:documentation>
-    	<wsdl:input message="tns:getWysylkaRequest"></wsdl:input>
-    	<wsdl:output message="tns:getWysylkaResponse"></wsdl:output>
+    <wsdl:operation name="dodajWysylke">
+      <wsdl:input message="tns:dodajWysylke" name="dodajWysylke">
+    </wsdl:input>
+      <wsdl:output message="tns:dodajWysylkeResponse" name="dodajWysylkeResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ValidationExceptionFault" name="ValidationExceptionFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="pobierzWysylke">
+      <wsdl:input message="tns:pobierzWysylke" name="pobierzWysylke">
+    </wsdl:input>
+      <wsdl:output message="tns:pobierzWysylkeResponse" name="pobierzWysylkeResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ValidationExceptionFault" name="ValidationExceptionFault">
+    </wsdl:fault>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="EPO_crzSOAP" type="tns:EPO_crz">
+  <wsdl:binding name="EUKWKomponentMsepoImplServiceSoapBinding" type="tns:EUKWKomponentMsepo">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="getSyncStatus">
-      <soap:operation soapAction="http://epo.ms.gov.pl/crz/getSyncStatus"/>
-      <wsdl:input>
+    <wsdl:operation name="dodajSyncStatus">
+      <soap:operation soapAction="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/dodajSyncStatus" style="document"/>
+      <wsdl:input name="dodajSyncStatus">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output>
+      <wsdl:output name="dodajSyncStatusResponse">
         <soap:body use="literal"/>
       </wsdl:output>
+      <wsdl:fault name="ValidationExceptionFault">
+        <soap:fault name="ValidationExceptionFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="pobierzSyncStatus">
+      <soap:operation soapAction="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/pobierzSyncStatus" style="document"/>
+      <wsdl:input name="pobierzSyncStatus">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="pobierzSyncStatusResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ValidationExceptionFault">
+        <soap:fault name="ValidationExceptionFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="dodajWysylke">
+      <soap:operation soapAction="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/dodajWysylke" style="document"/>
+      <wsdl:input name="dodajWysylke">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="dodajWysylkeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ValidationExceptionFault">
+        <soap:fault name="ValidationExceptionFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="pobierzWysylke">
+      <soap:operation soapAction="http://ms.gov.pl/ekw/channel/msepocentralnyrejestrzwrotek/pobierzWysylke" style="document"/>
+      <wsdl:input name="pobierzWysylke">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="pobierzWysylkeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ValidationExceptionFault">
+        <soap:fault name="ValidationExceptionFault" use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="EPO_crz">
-    <wsdl:port binding="tns:EPO_crzSOAP" name="EPO_crzSOAP">
-      <soap:address location="https://localhost:8080/EpoCrz"/>
+  <wsdl:service name="EUKWKomponentMsepoImplService">
+    <wsdl:port binding="tns:EUKWKomponentMsepoImplServiceSoapBinding" name="EUKWKomponentMsepoPort">
+      <soap:address location="http://172.25.117.92:80/eukw_msepo/EUKWKomponentMsepoImpl"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
