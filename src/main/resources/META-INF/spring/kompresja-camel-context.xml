@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://camel.apache.org/schema/spring
+	http://camel.apache.org/schema/spring/camel-spring.xsd
+	http://camel.apache.org/schema/cxf
+	http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <camelContext id="KompresjaContext" xmlns="http://camel.apache.org/schema/spring">
+        <route id="kompresjaRoute">
+            <from id="plikiWe" uri="file:kompresja/in"/>
+            <log message="Przetwarzam ${file:name}"/>
+            <log message="${body}"/>
+            <log message="Teraz na base64"/>
+            <marshal>
+                <base64 lineLength="0"/>
+            </marshal>
+            <log message="Teraz kompresja"/>
+            <marshal>
+                <zip compressionLevel="9"/>
+            </marshal>
+            <log message="Po przetworzeniu: ${body}"/>
+            <log message="Teraz dekompresja"/>
+            <unmarshal>
+                <zip compressionLevel="9"/>
+            </unmarshal>
+            <log message="Teraz na tekst"/>
+            <unmarshal>
+                <base64 lineLength="0"/>
+            </unmarshal>
+            <to id="plikiWy" uri="file:kompresja/wy"/>
+            <log message="Koniec ${file:name}"/>
+        </route>
+    </camelContext>
+
+</beans>

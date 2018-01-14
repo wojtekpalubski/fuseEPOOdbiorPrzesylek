@@ -73,6 +73,10 @@
 			<artifactId>camel-restlet</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-base64</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
@@ -88,6 +92,11 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test-spring</artifactId>
 		</dependency>
+		<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.8.1</version>
+			<scope>test></scope></dependency>
 	</dependencies>
 	<repositories>
 		<repository>
@@ -196,7 +205,7 @@
 				<artifactId>camel-maven-plugin</artifactId>
 				<version>${camel.version}</version>
 				<configuration>
-					<fileApplicationContextUri>src/main/resources/META-INF/spring/EPO_OdbiorPrzesylki-camel-context.xml</fileApplicationContextUri>
+					<fileApplicationContextUri>src/main/resources/META-INF/spring/kompresja-camel-context.xml</fileApplicationContextUri>
 				</configuration>
 			</plugin>
 			<plugin>
